@@ -1,5 +1,8 @@
 import { Geist, Geist_Mono, Mona_Sans } from "next/font/google";
 import "./globals.css";
+import "remixicon/fonts/remixicon.css";
+import { Providers } from "@/utils/Providers";
+import store from "@/store/store";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +30,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers store={store}>{children}</Providers>
       </body>
     </html>
   );
