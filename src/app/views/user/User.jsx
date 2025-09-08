@@ -146,6 +146,10 @@ const User = () => {
     },
   ];
 
+  const handleModal = () => {
+    setIsCreateUser(false);
+  };
+
   return (
     <Box
       sx={{
@@ -215,6 +219,7 @@ const User = () => {
               <i class="ri-time-line"></i>
               <span>Bulk add users</span>
             </Button>
+
             <Button
               size="small"
               sx={{
@@ -234,6 +239,7 @@ const User = () => {
               <i class="ri-file-text-line"></i>
               <span>Export users</span>
             </Button>
+
             <Button
               size="small"
               sx={{
@@ -251,6 +257,7 @@ const User = () => {
                 // borderBottom: "2px solid #EFEFEF",
                 borderRadius: "10px",
               }}
+              onClick={() => setIsCreateUser(true)}
             >
               <i class="ri-add-line"></i>
               <span>Add User</span>
@@ -282,7 +289,7 @@ const User = () => {
             }}
           />
         </div>
-        {isCreateUser && <CreateUser />}
+        {isCreateUser && <CreateUser handleModal={handleModal} />}
       </Box>
     </Box>
   );

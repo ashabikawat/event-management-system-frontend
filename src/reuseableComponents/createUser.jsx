@@ -1,8 +1,15 @@
-import { Close } from "@mui/icons-material";
-import { Box, FormControl, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 
-const CreateUser = () => {
+const CreateUser = ({ handleModal }) => {
   return (
     <Box
       sx={{
@@ -32,10 +39,10 @@ const CreateUser = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "20px",
+            marginBottom: "30px",
           }}
         >
-          <Typography fontWeight={600} fontFamily="inherit">
+          <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
             Add User
           </Typography>
           <span
@@ -44,13 +51,16 @@ const CreateUser = () => {
               padding: "2px 6px",
               borderRadius: "20px",
               border: "1px solid #F8FAFB",
+              cursor: "pointer",
             }}
+            onClick={handleModal}
           >
             {" "}
             <i
               class="ri-close-fill"
               style={{
                 fontSize: "16px",
+                fontWeight: "500",
               }}
             ></i>
           </span>
@@ -66,8 +76,10 @@ const CreateUser = () => {
           <FormControl fullWidth>
             <label
               style={{
-                color: "#9C9C9C",
+                color: "#8D8D8D",
                 marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
               }}
             >
               Username
@@ -91,8 +103,74 @@ const CreateUser = () => {
           <FormControl fullWidth>
             <label
               style={{
-                color: "#9C9C9C",
+                color: "#8D8D8D",
                 marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              Password
+            </label>
+            <TextField
+              variant="outlined"
+              size="small"
+              sx={{
+                bgcolor: "#FAFAFA",
+                borderRadius: "10px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px", // applies to the outer border
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "10px", // ensures the outline itself has rounded corners
+                },
+              }}
+            />
+          </FormControl>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "30px",
+            marginTop: "14px",
+          }}
+        >
+          <FormControl fullWidth>
+            <label
+              style={{
+                color: "#8D8D8D",
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              Phone no
+            </label>
+            <TextField
+              variant="outlined"
+              size="small"
+              sx={{
+                bgcolor: "#FAFAFA",
+                borderRadius: "10px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px", // applies to the outer border
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "10px", // ensures the outline itself has rounded corners
+                },
+              }}
+            />
+          </FormControl>
+
+          <FormControl fullWidth>
+            <label
+              style={{
+                color: "#8D8D8D",
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
               }}
             >
               Email
@@ -120,18 +198,19 @@ const CreateUser = () => {
             alignItems: "center",
             justifyContent: "space-between",
             gap: "30px",
-            marginTop: "20px",
+            marginTop: "14px",
           }}
         >
           <FormControl fullWidth>
             <label
               style={{
-                color: "#9C9C9C",
+                color: "#8D8D8D",
                 marginBottom: "10px",
-                fontSize: "16px",
+                fontSize: "14px",
+                fontWeight: "500",
               }}
             >
-              Username
+              Display name
             </label>
             <TextField
               variant="outlined"
@@ -152,14 +231,15 @@ const CreateUser = () => {
           <FormControl fullWidth>
             <label
               style={{
-                color: "#9C9C9C",
+                color: "#8D8D8D",
                 marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
               }}
             >
-              Email
+              Role
             </label>
-            <TextField
-              variant="outlined"
+            <Select
               size="small"
               sx={{
                 bgcolor: "#FAFAFA",
@@ -171,8 +251,47 @@ const CreateUser = () => {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
               }}
-            />
+            >
+              <MenuItem value="admin">Admin</MenuItem>
+            </Select>
           </FormControl>
+        </Box>
+        <Box
+          sx={{
+            marginTop: "24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              bgcolor: "white",
+              color: "black",
+              border: "1px solid #D8D8D9",
+              boxShadow: 0,
+              fontWeight: "500",
+              fontFamily: "inherit",
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              bgcolor: "#28A745",
+              color: "#FFFFFF",
+              boxShadow: 0,
+              fontWeight: "500",
+              fontFamily: "inherit",
+            }}
+          >
+            Create
+          </Button>
         </Box>
       </Box>
     </Box>
