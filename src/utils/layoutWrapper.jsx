@@ -12,14 +12,12 @@ const LayoutWrapper = ({ children }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        // justifyContent: "space-between",
-        height: "100%",
+        height: "100vh",
       }}
     >
       <Box
         sx={{
-          height: "100%",
-          width: `${expanded ? "300px" : "100px"}`,
+          width: `${expanded ? "250px" : "100px"}`,
         }}
       >
         <Sidebar
@@ -30,11 +28,15 @@ const LayoutWrapper = ({ children }) => {
           expanded={expanded}
         />
       </Box>
-
       <Box
         sx={{
+          bgcolor: "#FAFAFA",
+          p: 2,
+          flex: 1,
+          minWidth: 0,
           height: "100%",
-          width: "100%",
+          width: "calc(100% - ${expanded ? '300px' : '100px'})",
+          width: `${expanded ? "800px" : "100px"}`,
         }}
       >
         {children}
