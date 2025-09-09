@@ -1,1 +1,1 @@
-1. swal pending for showing error in the catch block and when wrong id and password
+swal pending for showing error in the catch block and when wrong id and password

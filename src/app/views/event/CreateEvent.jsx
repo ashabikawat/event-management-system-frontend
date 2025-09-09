@@ -1,4 +1,5 @@
 "use client";
+import CreateFaq from "@/reuseableComponents/CreateFaq";
 import { CloudUpload } from "@mui/icons-material";
 import {
   Box,
@@ -15,9 +16,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const CreateEvent = () => {
+  const [isCreateFaq, setIsCreateFaq] = useState(false);
+
+  const handleModal = () => {
+    setIsCreateFaq(false);
+  };
   return (
     <Box
       sx={{
@@ -383,6 +389,7 @@ const CreateEvent = () => {
                   sx={{
                     bgcolor: "blueviolet",
                   }}
+                  onClick={() => setIsCreateFaq(true)}
                 >
                   Add Faq
                 </Button>
@@ -395,6 +402,8 @@ const CreateEvent = () => {
                   Add Carousel images
                 </Button>
               </Box>
+
+              {isCreateFaq && <CreateFaq handleModal={handleModal} />}
             </Box>
           </Grid>
         </Grid>
