@@ -34,7 +34,6 @@ const sidebar = ({
           setIsHovered(false);
         }
       }}
-      onClick={() => setsIsCollapsed(!isCollapsed)}
     >
       <Box
         sx={{
@@ -65,6 +64,7 @@ const sidebar = ({
             </Box>
             {expanded && (
               <Box
+                onClick={() => setsIsCollapsed(!isCollapsed)}
                 sx={{
                   cursor: "pointer",
                   padding: "6px",

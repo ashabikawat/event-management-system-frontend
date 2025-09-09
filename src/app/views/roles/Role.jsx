@@ -1,99 +1,87 @@
 "use client";
-import { Box, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import CreateRole from "@/reuseableComponents/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
-import CreateUser from "@/reuseableComponents/createUser";
+import { Box, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
 
-const User = () => {
-  const [isCreateUser, setIsCreateUser] = useState(false);
+const Role = () => {
   const rows = [
     {
       id: 1,
-      username: "ashaa_b",
-      name: "Ashaa Bikawat",
-      email: "ashaa.b@example.com",
-      phone: "+91 98765 43210",
+      roleName: "Admin",
+      description: "Full access to all system features",
+      permissions: "Read, Write, Delete, Manage Users",
       status: "Active",
     },
     {
       id: 2,
-      username: "raaj_p",
-      name: "Raaj Patil",
-      email: "raaj.p@example.com",
-      phone: "+91 87654 32109",
+      roleName: "Manager",
+      description: "Manage teams and oversee projects",
+      permissions: "Read, Write, Approve",
       status: "Active",
     },
     {
       id: 3,
-      username: "salman_k",
-      name: "Salman Khan",
-      email: "salman.khan@example.com",
-      phone: "+91 76543 21098",
-      status: "Inactive",
-    },
-    {
-      id: 4,
-      username: "aamir_k",
-      name: "Aamir Khan",
-      email: "aamir.khan@example.com",
-      phone: "+91 65432 10987",
+      roleName: "Editor",
+      description: "Can edit and update content",
+      permissions: "Read, Write",
       status: "Active",
     },
     {
+      id: 4,
+      roleName: "Viewer",
+      description: "Read-only access to system data",
+      permissions: "Read",
+      status: "Inactive",
+    },
+    {
       id: 5,
-      username: "neha_s",
-      name: "Neha Sharma",
-      email: "neha.sharma@example.com",
-      phone: "+91 91234 56780",
+      roleName: "HR",
+      description: "Manages employee records and payroll",
+      permissions: "Read, Write, Approve",
       status: "Active",
     },
     {
       id: 6,
-      username: "vikram_r",
-      name: "Vikram Rao",
-      email: "vikram.rao@example.com",
-      phone: "+91 99887 66554",
+      roleName: "Finance",
+      description: "Handles billing and financial reports",
+      permissions: "Read, Write",
       status: "Inactive",
     },
     {
       id: 7,
-      username: "meena_g",
-      name: "Meena Gupta",
-      email: "meena.g@example.com",
-      phone: "+91 88990 11223",
+      roleName: "Support",
+      description: "Handles user queries and tickets",
+      permissions: "Read, Write",
       status: "Active",
     },
     {
       id: 8,
-      username: "arjun_m",
-      name: "Arjun Mehta",
-      email: "arjun.mehta@example.com",
-      phone: "+91 93456 78901",
+      roleName: "QA",
+      description: "Tests and ensures product quality",
+      permissions: "Read, Write, Approve",
       status: "Inactive",
     },
     {
       id: 9,
-      username: "priya_k",
-      name: "Priya Kapoor",
-      email: "priya.kapoor@example.com",
-      phone: "+91 94567 89012",
+      roleName: "Developer",
+      description: "Builds and maintains system features",
+      permissions: "Read, Write, Deploy",
       status: "Active",
     },
     {
       id: 10,
-      username: "rahul_j",
-      name: "Rahul Joshi",
-      email: "rahul.joshi@example.com",
-      phone: "+91 95678 90123",
-      status: "Active",
+      roleName: "Guest",
+      description: "Temporary access with limited rights",
+      permissions: "Read",
+      status: "Inactive",
     },
   ];
 
   const columns = [
-    { field: "username", headerName: "Username", flex: 1 },
-    { field: "name", headerName: "Display Name", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "phone", headerName: "Phone Number", flex: 1 },
+    { field: "roleName", headerName: "Role Name", flex: 1 },
+    { field: "description", headerName: "Description", flex: 2 },
+    { field: "permissions", headerName: "Permissions", flex: 1 },
     {
       field: "status",
       headerName: "Status",
@@ -146,10 +134,10 @@ const User = () => {
     },
   ];
 
+  const [isCreateRole, setIsCreateRole] = useState(false);
   const handleModal = () => {
-    setIsCreateUser(false);
+    setIsCreateRole(false);
   };
-
   return (
     <Box
       sx={{
@@ -169,11 +157,10 @@ const User = () => {
       >
         <Box>
           <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
-            Users
+            Roles
           </Typography>
         </Box>
       </Box>
-
       <Box
         sx={{
           bgcolor: "#FFFFFF",
@@ -191,7 +178,7 @@ const User = () => {
           }}
         >
           <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
-            All users
+            All roles
           </Typography>
           <Box
             sx={{
@@ -217,7 +204,7 @@ const User = () => {
               }}
             >
               <i class="ri-time-line"></i>
-              <span>Bulk add users</span>
+              <span>Bulk add roles</span>
             </Button>
 
             <Button
@@ -237,7 +224,7 @@ const User = () => {
               }}
             >
               <i class="ri-file-text-line"></i>
-              <span>Export users</span>
+              <span>Export roles</span>
             </Button>
 
             <Button
@@ -257,10 +244,10 @@ const User = () => {
                 // borderBottom: "2px solid #EFEFEF",
                 borderRadius: "10px",
               }}
-              onClick={() => setIsCreateUser(true)}
+              onClick={() => setIsCreateRole(true)}
             >
               <i class="ri-add-line"></i>
-              <span>Add User</span>
+              <span>Add Role</span>
             </Button>
           </Box>
         </Box>
@@ -269,10 +256,10 @@ const User = () => {
         <div style={{ height: 500, width: "100%" }}>
           <Datagrid rows={rows} columns={columns} />
         </div>
-        {isCreateUser && <CreateUser handleModal={handleModal} />}
+        {isCreateRole && <CreateRole handleModal={handleModal} />}
       </Box>
     </Box>
   );
 };
 
-export default User;
+export default Role;
