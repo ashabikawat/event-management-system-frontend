@@ -2,7 +2,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Datagrid from "@/reuseableComponents/dataGrid";
-import CreateUser from "@/reuseableComponents/createUser";
+import CreateUser from "@/app/views/user/createUser";
 
 const User = () => {
   const [isCreateUser, setIsCreateUser] = useState(false);

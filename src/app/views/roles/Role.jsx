@@ -1,5 +1,5 @@
 "use client";
-import CreateRole from "@/reuseableComponents/createRole";
+import CreateRole from "@/app/views/roles/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import { Box, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
