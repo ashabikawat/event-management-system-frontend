@@ -48,7 +48,13 @@ const CreateEvent = () => {
         </Box>
       </Box>
 
-      <Box>
+      <Box
+        sx={{
+          bgcolor: "#FFFFFF",
+          borderRadius: "16px",
+          padding: "16px",
+        }}
+      >
         <Grid container spacing={6}>
           <Grid size={{ xs: 12, md: 6 }}>
             <Box
@@ -87,36 +93,50 @@ const CreateEvent = () => {
                 />
               </FormControl>
               {/* upload image */}
-              <Box
-                sx={{
-                  border: "2px  dashed #ccc",
-                  height: "250px",
-                  width: "100%",
-                  p: 4,
-                  cursor: "pointer",
-                  textAlign: "center",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                  bgcolor: "white",
-                }}
-              >
-                <CloudUpload
-                  sx={{
-                    fontSize: "32px",
-                  }}
-                />
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  sx={{
-                    fontFamily: "inherit",
+              <Box>
+                <label
+                  style={{
+                    color: "#8D8D8D",
+                    marginBottom: "10px",
+                    fontSize: "14px",
+                    fontWeight: "500",
                   }}
                 >
-                  Click to upload images
-                </Typography>
+                  Event images
+                </label>
+                <Box
+                  sx={{
+                    border: "2px  dashed #ccc",
+                    height: "250px",
+                    width: "100%",
+                    p: 4,
+                    cursor: "pointer",
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    bgcolor: "#FAFAFA",
+                    mt: "12px",
+                  }}
+                >
+                  <CloudUpload
+                    sx={{
+                      fontSize: "32px",
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    sx={{
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    Click to upload images
+                  </Typography>
+                </Box>
               </Box>
+
               {/* venue type */}
               <FormControl>
                 <FormLabel
@@ -257,7 +277,7 @@ const CreateEvent = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "10px",
+                  gap: "20px",
                 }}
               >
                 {/* start date and time */}
@@ -316,8 +336,11 @@ const CreateEvent = () => {
                     }}
                   />
                 </FormControl>
+              </Box>
+
+              <Box>
                 {/* event duration */}
-                <FormControl>
+                <FormControl fullWidth>
                   <label
                     style={{
                       color: "#8D8D8D",
@@ -407,30 +430,12 @@ const CreateEvent = () => {
             </Box>
           </Grid>
         </Grid>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginTop: "26px",
-        }}
-      >
-        <Button
-          variant="contained"
-          size="small"
-          sx={{
-            fontFamily: "inherit",
-          }}
-        >
-          Reset
-        </Button>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: "14px",
+            justifyContent: "space-between",
+            marginTop: "26px",
           }}
         >
           <Button
@@ -440,17 +445,34 @@ const CreateEvent = () => {
               fontFamily: "inherit",
             }}
           >
-            Create Event
+            Reset
           </Button>
-          <Button
-            variant="contained"
-            size="small"
+          <Box
             sx={{
-              fontFamily: "inherit",
+              display: "flex",
+              alignItems: "center",
+              gap: "14px",
             }}
           >
-            Draft Event
-          </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                fontFamily: "inherit",
+              }}
+            >
+              Create Event
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                fontFamily: "inherit",
+              }}
+            >
+              Draft Event
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>
