@@ -1,31 +1,29 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
 import React from "react";
 
-const Datagrid = ({ rows, columns }) => {
+const Datagrid = ({ columns, value }) => {
   return (
-    <>
-      <DataGrid
-        rows={rows}
-        checkboxSelection
-        columns={columns}
-        columnHeaderHeight={40}
-        sx={{
-          border: "none",
-          "& .MuiDataGrid-columnSeparator": {
-            display: "none",
-          },
-          // Test with a very obvious color first
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#FAFAFA !important", // Test color
-            border: "none !important",
-          },
-          "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#FAFAFA !important", // Test color
-            border: "none !important",
-          },
-        }}
-      />
-    </>
+    <div className="card">
+      <DataTable
+        value={value}
+        tableStyle={{ minWidth: "60rem" }}
+        scrollable
+        scrollHeight="500px"
+      >
+        {columns?.map((c) => (
+          <Column
+            key={c.id}
+            field={c.field}
+            header={c.header}
+            style={{
+              fontSize: "14px",
+            }}
+            body={c.body}
+          />
+        ))}
+      </DataTable>
+    </div>
   );
 };
 

@@ -2,10 +2,11 @@
 import CreateRole from "@/app/views/roles/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import { Box, Button, Typography } from "@mui/material";
+import { Tag } from "primereact/tag";
 import React, { useState } from "react";
 
 const Role = () => {
-  const rows = [
+  const roles = [
     {
       id: 1,
       roleName: "Admin",
@@ -78,60 +79,55 @@ const Role = () => {
     },
   ];
 
+  const StatusTemplate = (row) => {
+    const statusColors = {
+      Active: { severity: "success", label: "Active" }, // green
+      Inactive: { severity: "danger", label: "Inactive" }, // red
+    };
+
+    const st = statusColors[row.status] || {
+      severity: "secondary",
+      label: row.status,
+    };
+    return <Tag value={st.label} severity={st.severity} />;
+  };
+
+  const ActionTemplate = (row) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          width: "100%",
+        }}
+      >
+        <i
+          class="ri-edit-fill"
+          style={{
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        ></i>
+
+        <i
+          class="ri-delete-bin-5-fill"
+          style={{
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        ></i>
+      </div>
+    );
+  };
+
   const columns = [
-    { field: "roleName", headerName: "Role Name", flex: 1 },
-    { field: "description", headerName: "Description", flex: 2 },
-    { field: "permissions", headerName: "Permissions", flex: 1 },
-    {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-      renderCell: (params) => {
-        const value = params.value;
-        const bgColor = value === "Active" ? "#E7FDE6" : "#FEF2E7";
-        const textColor = value === "Active" ? "#2E7D32" : "#EF6C00";
-        return (
-          <Box
-            sx={{
-              bgcolor: bgColor,
-              color: textColor,
-              borderRadius: "999px",
-              minWidth: "80px",
-              display: "inline-block",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                textAlign: "center",
-              }}
-            >
-              {value}
-            </Typography>
-          </Box>
-        );
-      },
-    },
-    {
-      field: "Action",
-      // headerName: "Status",
-      flex: 1,
-      renderCell: (params) => {
-        // const value = params.value;
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <i class="ri-pencil-line"></i>
-            <i class="ri-delete-bin-line" style={{ color: "#CF193A" }}></i>
-          </Box>
-        );
-      },
-    },
+    { id: 1, field: "id", header: "ID" },
+    { id: 2, field: "roleName", header: "Role name" },
+    { id: 3, field: "description", header: "Description" },
+    { id: 4, field: "permissions", header: "Permissions" },
+    { id: 6, field: "status", header: "Status", body: StatusTemplate },
+    { id: 7, field: "action", header: "Actions", body: <ActionTemplate /> },
   ];
 
   const [isCreateRole, setIsCreateRole] = useState(false);
@@ -254,7 +250,7 @@ const Role = () => {
 
         {/* table grid*/}
         <div style={{ height: 500, width: "100%" }}>
-          <Datagrid rows={rows} columns={columns} />
+          <Datagrid value={roles} columns={columns} />
         </div>
         {isCreateRole && <CreateRole handleModal={handleModal} />}
       </Box>

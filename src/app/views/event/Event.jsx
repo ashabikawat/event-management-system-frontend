@@ -1,100 +1,64 @@
 "use client";
-import Datagrid from "@/reuseableComponents/dataGrid";
-import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, Divider, Tab, Tabs, Typography } from "@mui/material";
+import React, { useState } from "react";
+import All from "./All";
+import Completed from "./Completed";
+import Rejected from "./Rejected";
+import Draft from "./Draft";
+import Pending from "./Pending";
 
 const Event = () => {
-  const rows = [
+  const [selectedType, setSelectedType] = useState("All");
+
+  const statuses = [
     {
       id: 1,
-      eventName: "Tech Conference 2025",
-      startDateTime: "2025-09-15 10:00 AM",
-      endDateTime: "2025-09-15 05:00 PM",
-      venue: "Bangalore Convention Center",
-      status: "Completed",
+      status: "All",
+      value: <All />,
     },
     {
       id: 2,
-      eventName: "Startup Pitch Night",
-      startDateTime: "2025-09-20 06:00 PM",
-      endDateTime: "2025-09-20 09:00 PM",
-      venue: "Mumbai Innovation Hub",
-      status: "In Progress",
+      status: "Pending",
+      value: <Pending />,
     },
     {
       id: 3,
-      eventName: "Design Thinking Workshop",
-      startDateTime: "2025-09-25 09:00 AM",
-      endDateTime: "2025-09-25 01:00 PM",
-      venue: "Delhi Co-Working Space",
-      status: "Draft",
+      status: "Completed",
+      value: <Completed />,
     },
     {
       id: 4,
-      eventName: "AI & ML Summit",
-      startDateTime: "2025-10-02 09:30 AM",
-      endDateTime: "2025-10-02 04:30 PM",
-      venue: "Hyderabad Tech Park",
-      status: "Completed",
+      status: "Rejected",
+      value: <Rejected />,
     },
     {
       id: 5,
-      eventName: "Cultural Fest 2025",
-      startDateTime: "2025-10-05 05:00 PM",
-      endDateTime: "2025-10-05 11:00 PM",
-      venue: "Chennai Arts Arena",
-      status: "Rejected",
-    },
-    {
-      id: 6,
-      eventName: "Hackathon 48hr",
-      startDateTime: "2025-10-10 08:00 AM",
-      endDateTime: "2025-10-12 08:00 AM",
-      venue: "Pune IT Hub",
-      status: "In Progress",
-    },
-    {
-      id: 7,
-      eventName: "Product Launch Gala",
-      startDateTime: "2025-10-15 07:00 PM",
-      endDateTime: "2025-10-15 10:00 PM",
-      venue: "Goa Beach Resort",
       status: "Draft",
-    },
-    {
-      id: 8,
-      eventName: "Health & Wellness Expo",
-      startDateTime: "2025-10-18 09:00 AM",
-      endDateTime: "2025-10-18 06:00 PM",
-      venue: "Jaipur Exhibition Center",
-      status: "Completed",
-    },
-    {
-      id: 9,
-      eventName: "Blockchain Meetup",
-      startDateTime: "2025-10-22 04:00 PM",
-      endDateTime: "2025-10-22 08:00 PM",
-      venue: "Ahmedabad FinTech Hub",
-      status: "Rejected",
-    },
-    {
-      id: 10,
-      eventName: "Music Fiesta 2025",
-      startDateTime: "2025-10-28 05:00 PM",
-      endDateTime: "2025-10-28 11:30 PM",
-      venue: "Kolkata Open Grounds",
-      status: "In Progress",
+      value: <Draft />,
     },
   ];
 
-  const columns = [
-    // { field: "id", headerName: "ID", flex: 1 },
-    { field: "eventName", headerName: "Event Name", flex: 1 },
-    { field: "startDateTime", headerName: "Start Date & Time", flex: 1 },
-    { field: "endDateTime", headerName: "End Date & Time", flex: 1 },
-    { field: "venue", headerName: "Venue", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-  ];
+  const getComponent = (type) => {
+    switch (type) {
+      case "All":
+        return <All />;
+
+      case "Pending":
+        return <Pending />;
+
+      case "Completed":
+        return <Completed />;
+
+      case "Rejected":
+        return <Rejected />;
+
+      case "Draft":
+        return <Draft />;
+
+      default:
+        return <All />;
+    }
+  };
 
   return (
     <Box
@@ -111,6 +75,7 @@ const Event = () => {
           alignItems: "center",
           justifyContent: "space-between",
           marginBottom: "20px",
+          width: "100%",
         }}
       >
         <Box>
@@ -124,6 +89,7 @@ const Event = () => {
           bgcolor: "#FFFFFF",
           borderRadius: "16px",
           padding: "16px",
+          width: "100%",
         }}
       >
         {/* cta btns */}
@@ -136,7 +102,7 @@ const Event = () => {
           }}
         >
           <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
-            All events
+            Events
           </Typography>
           <Box
             sx={{
@@ -192,10 +158,64 @@ const Event = () => {
           </Box>
         </Box>
 
-        {/* table grid*/}
-        <div style={{ height: 500, width: "100%" }}>
-          <Datagrid rows={rows} columns={columns} />
-        </div>
+        {/* tabs */}
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{
+              width: "100%",
+              // bgcolor: "red",
+              height: "50px",
+              padding: "0 10px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                // justifyContent: "space-between",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              {statuses.map((stats) => (
+                <Box
+                  sx={{
+                    cursor: "pointer",
+                    // border: "1px solid black",
+                    borderBottom: "2px solid transparent",
+                    padding: "4px 16px",
+                    transition: "border-color 0.3s ease-in-out",
+                    "&:hover": {
+                      borderBottom: "2px solid blue",
+                    },
+
+                    bgcolor: selectedType === stats.status ? "#E3F2FD" : "",
+                    borderRadius:
+                      selectedType === stats.status ? "10px" : "0px",
+                  }}
+                  onClick={() => setSelectedType(stats.status)}
+                >
+                  <Typography
+                    key={stats.id}
+                    sx={{
+                      fontFamily: "inherit",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      fontWeight: selectedType === stats.status ? "500" : "400",
+                    }}
+                  >
+                    {stats.status}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </Box>
+
+        <Divider />
+
+        {getComponent(selectedType)}
       </Box>
     </Box>
   );

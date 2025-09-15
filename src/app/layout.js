@@ -1,6 +1,9 @@
 import { Geist, Geist_Mono, Mona_Sans } from "next/font/google";
 import "./globals.css";
 import "remixicon/fonts/remixicon.css";
+
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 import { Providers } from "@/utils/Providers";
 import store from "@/store/store";
 

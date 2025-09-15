@@ -3,10 +3,11 @@ import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import CreateUser from "@/app/views/user/createUser";
+import { Tag } from "primereact/tag";
 
 const User = () => {
   const [isCreateUser, setIsCreateUser] = useState(false);
-  const rows = [
+  const user = [
     {
       id: 1,
       username: "ashaa_b",
@@ -89,61 +90,56 @@ const User = () => {
     },
   ];
 
-  const columns = [
-    { field: "username", headerName: "Username", flex: 1 },
-    { field: "name", headerName: "Display Name", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "phone", headerName: "Phone Number", flex: 1 },
-    {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-      renderCell: (params) => {
-        const value = params.value;
-        const bgColor = value === "Active" ? "#E7FDE6" : "#FEF2E7";
-        const textColor = value === "Active" ? "#2E7D32" : "#EF6C00";
-        return (
-          <Box
-            sx={{
-              bgcolor: bgColor,
-              color: textColor,
-              borderRadius: "999px",
-              minWidth: "80px",
-              display: "inline-block",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                textAlign: "center",
-              }}
-            >
-              {value}
-            </Typography>
-          </Box>
-        );
-      },
-    },
-    {
-      field: "Action",
-      // headerName: "Status",
-      flex: 1,
-      renderCell: (params) => {
-        // const value = params.value;
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <i class="ri-pencil-line"></i>
-            <i class="ri-delete-bin-line" style={{ color: "#CF193A" }}></i>
-          </Box>
-        );
-      },
-    },
+  const StatusTemplate = (row) => {
+    const statusColors = {
+      Active: { severity: "success", label: "Active" }, // green
+      Inactive: { severity: "danger", label: "Inactive" }, // red
+    };
+
+    const st = statusColors[row.status] || {
+      severity: "secondary",
+      label: row.status,
+    };
+    return <Tag value={st.label} severity={st.severity} />;
+  };
+
+  const ActionTemplate = (row) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          width: "100%",
+        }}
+      >
+        <i
+          class="ri-edit-fill"
+          style={{
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        ></i>
+
+        <i
+          class="ri-delete-bin-5-fill"
+          style={{
+            cursor: "pointer",
+            fontSize: "14px",
+          }}
+        ></i>
+      </div>
+    );
+  };
+
+  const column = [
+    { id: 1, field: "id", header: "ID" },
+    { id: 2, field: "username", header: "User name" },
+    { id: 3, field: "name", header: "Display name" },
+    { id: 4, field: "email", header: "Email" },
+    { id: 5, field: "phone", header: "Phone no." },
+    { id: 6, field: "status", header: "Status", body: StatusTemplate },
+    { id: 7, field: "action", header: "Actions", body: <ActionTemplate /> },
   ];
 
   const handleModal = () => {
@@ -266,9 +262,9 @@ const User = () => {
         </Box>
 
         {/* table grid*/}
-        <div style={{ height: 500, width: "100%" }}>
-          <Datagrid rows={rows} columns={columns} />
-        </div>
+
+        <Datagrid columns={column} value={user} />
+
         {isCreateUser && <CreateUser handleModal={handleModal} />}
       </Box>
     </Box>

@@ -19,6 +19,7 @@ const CreateRole = ({ handleModal }) => {
         width: "100vw",
         height: "100vh",
         bgcolor: "rgba(0,0,0,0.5)",
+        zIndex: 2000,
       }}
     >
       <Box
