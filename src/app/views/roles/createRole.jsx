@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   MenuItem,
   Select,
   TextField,
@@ -10,6 +12,42 @@ import {
 } from "@mui/material";
 
 const CreateRole = ({ handleModal }) => {
+  const [formValues, setFormValues] = useState({
+    role: "",
+    roleAccess: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateData = (e) => {
+    e.preventDefault();
+
+    let newError = {};
+
+    const { role, roleAccess } = formValues;
+
+    if (!role) {
+      newError.role = "Role name is required";
+    }
+
+    if (!roleAccess) {
+      newError.roleAccess = "Role access is required";
+    }
+
+    setErrors(newError);
+  };
+
+  const handleReset = () => {
+    setFormValues({ role: "", roleAccess: "" });
+    setErrors({});
+  };
+
   return (
     <Box
       sx={{
@@ -19,7 +57,7 @@ const CreateRole = ({ handleModal }) => {
         width: "100vw",
         height: "100vh",
         bgcolor: "rgba(0,0,0,0.5)",
-        zIndex: 2000,
+        zIndex: 700,
       }}
     >
       <Box
@@ -48,12 +86,14 @@ const CreateRole = ({ handleModal }) => {
           </Typography>
           <span
             style={{
-              backgroundColor: "#F9F9F9",
+              backgroundColor: "red",
+              color: "white",
               padding: "2px 6px",
               borderRadius: "20px",
               border: "1px solid #F8FAFB",
               cursor: "pointer",
             }}
+            className="close-btn"
             onClick={handleModal}
           >
             {" "}
@@ -69,7 +109,7 @@ const CreateRole = ({ handleModal }) => {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
             gap: "30px",
           }}
@@ -83,25 +123,34 @@ const CreateRole = ({ handleModal }) => {
                 fontWeight: "500",
               }}
             >
-              Role name
+              Role name <span style={{ color: "red" }}>*</span>
             </label>
             <TextField
               variant="outlined"
               size="small"
+              name="role"
+              value={formValues.role}
+              onChange={handleChange}
               sx={{
-                bgcolor: "#FAFAFA",
                 borderRadius: "10px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "Mona Sans",
+                },
               }}
+              error={errors.role}
+              helperText={errors.role}
             />
           </FormControl>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth error={errors.roleAccess}>
             <label
               style={{
                 color: "#8D8D8D",
@@ -110,10 +159,13 @@ const CreateRole = ({ handleModal }) => {
                 fontWeight: "500",
               }}
             >
-              Role access
+              Role access <span style={{ color: "red" }}>*</span>
             </label>
             <Select
               size="small"
+              name="roleAccess"
+              value={formValues.roleAccess}
+              onChange={handleChange}
               sx={{
                 bgcolor: "#FAFAFA",
                 borderRadius: "10px",
@@ -122,6 +174,10 @@ const CreateRole = ({ handleModal }) => {
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
+                },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "Mona Sans",
                 },
               }}
             >
@@ -150,6 +206,9 @@ const CreateRole = ({ handleModal }) => {
                 Role management
               </MenuItem>
             </Select>
+            {errors.roleAccess && (
+              <FormHelperText>{errors.roleAccess}</FormHelperText>
+            )}
           </FormControl>
         </Box>
 
@@ -168,11 +227,20 @@ const CreateRole = ({ handleModal }) => {
             sx={{
               bgcolor: "white",
               color: "black",
-              border: "1px solid #D8D8D9",
+              border: "1px solid #F0F0F0",
               boxShadow: 0,
-              fontWeight: "500",
-              fontFamily: "inherit",
+              // fontWeight: "500",
+              fontFamily: "Mona Sans",
+              padding: "6px 22px",
+              textTransform: "capitalize",
+              borderRadius: "8px",
+              // fontSize: "16px",
+              "&:hover": {
+                bgcolor: "#F5F4F7",
+                boxShadow: 2,
+              },
             }}
+            onClick={handleReset}
           >
             Reset
           </Button>
@@ -180,12 +248,19 @@ const CreateRole = ({ handleModal }) => {
             variant="contained"
             size="small"
             sx={{
-              bgcolor: "#28A745",
+              bgcolor: "green",
               color: "#FFFFFF",
               boxShadow: 0,
               fontWeight: "500",
-              fontFamily: "inherit",
+              fontFamily: "Mona Sans",
+              textTransform: "capitalize",
+              padding: "6px 22px",
+              borderRadius: "8px",
+              "&:hover": {
+                boxShadow: 2,
+              },
             }}
+            onClick={validateData}
           >
             Create
           </Button>

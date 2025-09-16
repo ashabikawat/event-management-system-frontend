@@ -103,7 +103,7 @@ const All = () => {
     { id: 4, field: "endDateTime", header: "End Date & Time" },
     { id: 5, field: "venue", header: "Venue" },
     { id: 6, field: "status", header: "Status", body: statusTemplate },
-    { id: 7, field: "action", header: "Actions", body: <ActionTemplate /> },
+    { id: 7, field: "action", header: "Actions", body: ActionTemplate },
   ];
 
   return (

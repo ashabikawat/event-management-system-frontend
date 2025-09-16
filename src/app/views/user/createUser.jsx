@@ -182,7 +182,7 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
               error={errors.username}
@@ -231,7 +231,7 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
             />
@@ -279,7 +279,7 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
               error={errors.name}
@@ -315,11 +315,18 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
             >
-              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem
+                value="admin"
+                sx={{
+                  fontFamily: "inherit",
+                }}
+              >
+                Admin
+              </MenuItem>
               <MenuItem value="HR">HR</MenuItem>
               <MenuItem value="SDE">Software developer</MenuItem>
             </Select>
@@ -367,7 +374,7 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
               error={errors.phone}
@@ -404,7 +411,7 @@ const CreateUser = ({ handleModal }) => {
                 },
                 ".MuiInputBase-input": {
                   fontSize: "16px",
-                  fontFamily: "inherit",
+                  fontFamily: "Mona Sans",
                 },
               }}
               error={errors.email}
@@ -432,7 +439,7 @@ const CreateUser = ({ handleModal }) => {
               border: "1px solid #F0F0F0",
               boxShadow: 0,
               // fontWeight: "500",
-              fontFamily: "inherit",
+              fontFamily: "Mona Sans",
               padding: "6px 22px",
               textTransform: "capitalize",
               borderRadius: "8px",
@@ -454,7 +461,7 @@ const CreateUser = ({ handleModal }) => {
               color: "#FFFFFF",
               boxShadow: 0,
               fontWeight: "500",
-              fontFamily: "inherit",
+              fontFamily: "Mona Sans",
               textTransform: "capitalize",
               padding: "6px 22px",
               borderRadius: "8px",

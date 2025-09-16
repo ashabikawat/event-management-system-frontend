@@ -2,10 +2,13 @@
 import CreateRole from "@/app/views/roles/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import { Box, Button, Typography } from "@mui/material";
+import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { Tag } from "primereact/tag";
-import React, { useState } from "react";
+import { Toast } from "primereact/toast";
+import React, { useRef, useState } from "react";
 
 const Role = () => {
+  const toast = useRef(null);
   const roles = [
     {
       id: 1,
@@ -79,6 +82,47 @@ const Role = () => {
     },
   ];
 
+  const handleDelete = (row) => {
+    console.log("row", row);
+    confirmDialog({
+      message: "Are you sure you want to delete this role ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "none",
+      acceptClassName: "danger-btn",
+      acceptLabel: "Delete",
+      rejectLabel: "Cancel",
+      icon: (
+        <i
+          className="ri-delete-bin-6-line"
+          style={{
+            fontSize: "26px",
+          }}
+        ></i>
+      ),
+    });
+  };
+
+  const handleEdit = (row) => {
+    console.log("row", row);
+    confirmDialog({
+      message: "Are you sure you want to edit this role ?",
+      header: "Confirmation",
+      acceptLabel: "Edit",
+      rejectLabel: "Cancel",
+      acceptClassName: "edit-btn",
+      defaultFocus: "none",
+      icon: (
+        <i
+          className="ri-error-warning-line"
+          style={{
+            fontSize: "26px",
+          }}
+        ></i>
+      ),
+    });
+  };
+
   const StatusTemplate = (row) => {
     const statusColors = {
       Active: { severity: "success", label: "Active" }, // green
@@ -108,6 +152,7 @@ const Role = () => {
             cursor: "pointer",
             fontSize: "14px",
           }}
+          onClick={() => handleEdit(row)}
         ></i>
 
         <i
@@ -116,6 +161,7 @@ const Role = () => {
             cursor: "pointer",
             fontSize: "14px",
           }}
+          onClick={() => handleDelete(row)}
         ></i>
       </div>
     );
@@ -127,7 +173,7 @@ const Role = () => {
     { id: 3, field: "description", header: "Description" },
     { id: 4, field: "permissions", header: "Permissions" },
     { id: 6, field: "status", header: "Status", body: StatusTemplate },
-    { id: 7, field: "action", header: "Actions", body: <ActionTemplate /> },
+    { id: 7, field: "action", header: "Actions", body: ActionTemplate },
   ];
 
   const [isCreateRole, setIsCreateRole] = useState(false);
@@ -135,126 +181,138 @@ const Role = () => {
     setIsCreateRole(false);
   };
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100% ",
-        // padding: "10px",
-        overflow: "hidden",
-      }}
-    >
+    <>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "20px",
+          width: "100%",
+          height: "100% ",
+          // padding: "10px",
+          overflow: "hidden",
         }}
       >
-        <Box>
-          <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
-            Roles
-          </Typography>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          bgcolor: "#FFFFFF",
-          borderRadius: "16px",
-          padding: "16px",
-        }}
-      >
-        {/* cta btns */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "24px",
+            marginBottom: "20px",
           }}
         >
-          <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
-            All roles
-          </Typography>
+          <Box>
+            <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
+              Roles
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            bgcolor: "#FFFFFF",
+            borderRadius: "16px",
+            padding: "16px",
+          }}
+        >
+          {/* cta btns */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
+              justifyContent: "space-between",
+              marginBottom: "24px",
             }}
           >
-            <Button
-              size="small"
+            <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
+              All roles
+            </Typography>
+            <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                border: "2px solid #F7F7F7",
-                color: "#3D3D4E",
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 10px",
-                gap: "4px",
-                textTransform: "capitalize",
-                borderBottom: "2px solid #EFEFEF",
-                borderRadius: "10px",
+                gap: "10px",
               }}
             >
-              <i class="ri-time-line"></i>
-              <span>Bulk add roles</span>
-            </Button>
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #F0F0F0",
+                  color: "#3D3D4E",
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  borderRadius: "8px",
+                  gap: "4px",
+                  boxShadow: 0,
+                  textTransform: "capitalize",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    bgcolor: "#F5F4F7",
+                  },
+                }}
+              >
+                <i class="ri-time-line"></i>
+                <span>Bulk add roles</span>
+              </Button>
 
-            <Button
-              size="small"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                border: "2px solid #F7F7F7",
-                color: "#3D3D4E",
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 10px",
-                gap: "4px",
-                textTransform: "capitalize",
-                borderBottom: "2px solid #EFEFEF",
-                borderRadius: "10px",
-              }}
-            >
-              <i class="ri-file-text-line"></i>
-              <span>Export roles</span>
-            </Button>
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #F0F0F0",
+                  color: "#3D3D4E",
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  borderRadius: "8px",
+                  gap: "4px",
+                  boxShadow: 0,
+                  textTransform: "capitalize",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    bgcolor: "#F5F4F7",
+                  },
+                }}
+              >
+                <i class="ri-file-text-line"></i>
+                <span>Export roles</span>
+              </Button>
 
-            <Button
-              size="small"
-              sx={{
-                display: "flex",
-                bgcolor: "black",
-                alignItems: "center",
-                // border: "1px solid #EFEFEF",
-                color: "white",
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  bgcolor: "black",
+                  alignItems: "center",
+                  // border: "1px solid #EFEFEF",
+                  color: "white",
 
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 10px",
-                gap: "4px",
-                textTransform: "capitalize",
-                // borderBottom: "2px solid #EFEFEF",
-                borderRadius: "10px",
-              }}
-              onClick={() => setIsCreateRole(true)}
-            >
-              <i class="ri-add-line"></i>
-              <span>Add Role</span>
-            </Button>
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  gap: "4px",
+                  textTransform: "capitalize",
+                  // borderBottom: "2px solid #EFEFEF",
+                  borderRadius: "10px",
+                }}
+                onClick={() => setIsCreateRole(true)}
+              >
+                <i class="ri-add-line"></i>
+                <span>Add Role</span>
+              </Button>
+            </Box>
           </Box>
-        </Box>
 
-        {/* table grid*/}
-        <div style={{ height: 500, width: "100%" }}>
-          <Datagrid value={roles} columns={columns} />
-        </div>
-        {isCreateRole && <CreateRole handleModal={handleModal} />}
+          {/* table grid*/}
+          <div style={{ height: 500, width: "100%" }}>
+            <Datagrid value={roles} columns={columns} />
+          </div>
+          {isCreateRole && <CreateRole handleModal={handleModal} />}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

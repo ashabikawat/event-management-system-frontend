@@ -1,11 +1,14 @@
 "use client";
 import { Box, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import CreateUser from "@/app/views/user/createUser";
 import { Tag } from "primereact/tag";
+import { Toast } from "primereact/toast";
+import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 
 const User = () => {
+  const toast = useRef(null);
   const [isCreateUser, setIsCreateUser] = useState(false);
   const user = [
     {
@@ -90,6 +93,47 @@ const User = () => {
     },
   ];
 
+  const handleDelete = (row) => {
+    console.log("row", row);
+    confirmDialog({
+      message: "Are you sure you want to delete this user ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "none",
+      acceptClassName: "danger-btn",
+      acceptLabel: "Delete",
+      rejectLabel: "Cancel",
+      icon: (
+        <i
+          className="ri-delete-bin-6-line"
+          style={{
+            fontSize: "26px",
+          }}
+        ></i>
+      ),
+    });
+  };
+
+  const handleEdit = (row) => {
+    console.log("row", row);
+    confirmDialog({
+      message: "Are you sure you want to edit this user ?",
+      header: "Confirmation",
+      acceptLabel: "Edit",
+      rejectLabel: "Cancel",
+      acceptClassName: "edit-btn",
+      defaultFocus: "none",
+      icon: (
+        <i
+          className="ri-error-warning-line"
+          style={{
+            fontSize: "26px",
+          }}
+        ></i>
+      ),
+    });
+  };
+
   const StatusTemplate = (row) => {
     const statusColors = {
       Active: { severity: "success", label: "Active" }, // green
@@ -119,6 +163,7 @@ const User = () => {
             cursor: "pointer",
             fontSize: "14px",
           }}
+          onClick={() => handleEdit(row)}
         ></i>
 
         <i
@@ -127,6 +172,7 @@ const User = () => {
             cursor: "pointer",
             fontSize: "14px",
           }}
+          onClick={() => handleDelete(row)}
         ></i>
       </div>
     );
@@ -139,7 +185,7 @@ const User = () => {
     { id: 4, field: "email", header: "Email" },
     { id: 5, field: "phone", header: "Phone no." },
     { id: 6, field: "status", header: "Status", body: StatusTemplate },
-    { id: 7, field: "action", header: "Actions", body: <ActionTemplate /> },
+    { id: 7, field: "action", header: "Actions", body: ActionTemplate },
   ];
 
   const handleModal = () => {
@@ -147,135 +193,139 @@ const User = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100% ",
-        // padding: "10px",
-        overflow: "hidden",
-      }}
-    >
+    <>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "20px",
+          width: "100%",
+          height: "100% ",
+          // padding: "10px",
+          overflow: "hidden",
         }}
       >
-        <Box>
-          <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
-            Users
-          </Typography>
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: "#FFFFFF",
-          borderRadius: "16px",
-          padding: "16px",
-        }}
-      >
-        {/* cta btns */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "24px",
+            marginBottom: "20px",
           }}
         >
-          <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
-            All users
-          </Typography>
+          <Box>
+            <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
+              Users
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            bgcolor: "#FFFFFF",
+            borderRadius: "16px",
+            padding: "16px",
+          }}
+        >
+          {/* cta btns */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
+              justifyContent: "space-between",
+              marginBottom: "24px",
             }}
           >
-            <Button
-              size="small"
+            <Typography fontWeight="600" fontFamily="inherit" fontSize="16px">
+              All users
+            </Typography>
+            <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                border: "1px solid #F0F0F0",
-                color: "#3D3D4E",
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 20px",
-                borderRadius: "8px",
-                gap: "4px",
-                boxShadow: 0,
-                textTransform: "capitalize",
-                borderRadius: "10px",
-                "&:hover": {
-                  bgcolor: "#F5F4F7",
-                },
+                gap: "10px",
               }}
             >
-              <i class="ri-time-line"></i>
-              <span>Bulk add users</span>
-            </Button>
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #F0F0F0",
+                  color: "#3D3D4E",
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  borderRadius: "8px",
+                  gap: "4px",
+                  boxShadow: 0,
+                  textTransform: "capitalize",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    bgcolor: "#F5F4F7",
+                  },
+                }}
+              >
+                <i class="ri-time-line"></i>
+                <span>Bulk add users</span>
+              </Button>
 
-            <Button
-              size="small"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid #F0F0F0",
-                color: "#3D3D4E",
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 20px",
-                borderRadius: "8px",
-                gap: "4px",
-                boxShadow: 0,
-                textTransform: "capitalize",
-                borderRadius: "10px",
-                "&:hover": {
-                  bgcolor: "#F5F4F7",
-                },
-              }}
-            >
-              <i class="ri-file-text-line"></i>
-              <span>Export users</span>
-            </Button>
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #F0F0F0",
+                  color: "#3D3D4E",
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  borderRadius: "8px",
+                  gap: "4px",
+                  boxShadow: 0,
+                  textTransform: "capitalize",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    bgcolor: "#F5F4F7",
+                  },
+                }}
+              >
+                <i class="ri-file-text-line"></i>
+                <span>Export users</span>
+              </Button>
 
-            <Button
-              size="small"
-              sx={{
-                display: "flex",
-                bgcolor: "black",
-                alignItems: "center",
-                // border: "1px solid #EFEFEF",
-                color: "white",
+              <Button
+                size="small"
+                sx={{
+                  display: "flex",
+                  bgcolor: "black",
+                  alignItems: "center",
+                  // border: "1px solid #EFEFEF",
+                  color: "white",
 
-                fontWeight: "600",
-                fontFamily: "inherit",
-                padding: "6px 20px",
-                gap: "4px",
-                textTransform: "capitalize",
-                // borderBottom: "2px solid #EFEFEF",
-                borderRadius: "10px",
-              }}
-              onClick={() => setIsCreateUser(true)}
-            >
-              <i class="ri-add-line"></i>
-              <span>Add User</span>
-            </Button>
+                  fontWeight: "600",
+                  fontFamily: "inherit",
+                  padding: "6px 20px",
+                  gap: "4px",
+                  textTransform: "capitalize",
+                  // borderBottom: "2px solid #EFEFEF",
+                  borderRadius: "10px",
+                }}
+                onClick={() => setIsCreateUser(true)}
+              >
+                <i class="ri-add-line"></i>
+                <span>Add User</span>
+              </Button>
+            </Box>
           </Box>
+
+          {/* table grid*/}
+
+          <Datagrid columns={column} value={user} />
+
+          {isCreateUser && <CreateUser handleModal={handleModal} />}
         </Box>
-
-        {/* table grid*/}
-
-        <Datagrid columns={column} value={user} />
-
-        {isCreateUser && <CreateUser handleModal={handleModal} />}
       </Box>
-    </Box>
+    </>
   );
 };
 
