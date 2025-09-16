@@ -315,6 +315,8 @@ const User = () => {
               toast={toast}
               getUser={getUser}
               editObject={editObject}
+              setUpdateId={setUpdateId}
+              setEditObject={setEditObject}
             />
           )}
         </Box>

@@ -14,11 +14,28 @@ import { axiosWrapper } from "@/utils/axiosWrapper";
 import { menuEndpoints, roleEndpoints } from "@/utils/endpoints";
 import { showError, showSuccess } from "@/utils/confirmationBox";
 
-const CreateRole = ({ handleModal, toast, getRoles }) => {
+const CreateRole = ({
+  setEditObject,
+  toast,
+  getRoles,
+  editObject,
+  setIsCreateRole,
+  setUpdateId,
+}) => {
   const [formValues, setFormValues] = useState({
     role: "",
     roleAccess: [],
   });
+  console.log("editObject", editObject);
+
+  const isEdit = Object.keys(editObject)?.length > 0;
+
+  useEffect(() => {
+    setFormValues({
+      role: editObject?.role_name || "",
+      roleAccess: editObject?.menu_ids || [],
+    });
+  }, [editObject]);
 
   const [menus, setMenus] = useState([]);
 
@@ -45,22 +62,36 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
 
   const saveRole = async () => {
     try {
-      const payload = {
-        role_name: formValues.role,
-        menus: formValues.roleAccess,
-      };
+      let response;
+      if (isEdit) {
+        const payload = {
+          role_id: editObject.role_id,
+          role_name: formValues.role,
+          menus: formValues.roleAccess,
+        };
 
-      const response = await axiosWrapper(
-        roleEndpoints.CREATE_ROLES,
-        payload,
-        "post"
-      );
+        response = await axiosWrapper(
+          roleEndpoints.UPDATE_ROLE,
+          payload,
+          "patch"
+        );
+      } else {
+        const payload = {
+          role_name: formValues.role,
+          menus: formValues.roleAccess,
+        };
+
+        response = await axiosWrapper(
+          roleEndpoints.CREATE_ROLES,
+          payload,
+          "post"
+        );
+      }
 
       console.log(response.data.status);
 
       if (response.data.status === 200) {
         toast.current.show(showSuccess(response.data.message));
-        handleModal();
         handleReset();
         getRoles();
       }
@@ -68,7 +99,7 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
       // console.log(error);
       if (error) {
         toast.current.show(showError(error.response.data.message));
-        handleModal();
+        setIsCreateRole(false);
         handleReset();
       }
     }
@@ -99,6 +130,9 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
   const handleReset = () => {
     setFormValues({ role: "", roleAccess: "" });
     setErrors({});
+    setUpdateId(null);
+    setEditObject({});
+    setIsCreateRole(false);
   };
 
   return (
@@ -135,7 +169,7 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
           }}
         >
           <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
-            Add Role
+            {isEdit ? "Update Role" : "Add Role"}
           </Typography>
           <span
             style={{
@@ -147,7 +181,11 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
               cursor: "pointer",
             }}
             className="close-btn"
-            onClick={handleModal}
+            onClick={() => {
+              setIsCreateRole(false);
+              setUpdateId(null);
+              setEditObject({});
+            }}
           >
             {" "}
             <i
@@ -302,7 +340,7 @@ const CreateRole = ({ handleModal, toast, getRoles }) => {
             }}
             onClick={validateData}
           >
-            Create
+            {isEdit ? "Update" : "Create"}
           </Button>
         </Box>
       </Box>

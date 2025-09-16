@@ -14,6 +14,8 @@ export const userEndpoints = {
 export const roleEndpoints = {
   GET_ROLES: url + "/role/getRoles",
   CREATE_ROLES: url + "/role/createRole",
+  GET_ROLE_BY_ID: url + "/role/getRole",
+  UPDATE_ROLE: url + "/role/updateRole",
 };
 
 export const menuEndpoints = {

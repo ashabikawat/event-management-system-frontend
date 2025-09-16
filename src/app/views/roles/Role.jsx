@@ -2,6 +2,7 @@
 import CreateRole from "@/app/views/roles/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
 import { axiosWrapper } from "@/utils/axiosWrapper";
+import { showError } from "@/utils/confirmationBox";
 import { roleEndpoints } from "@/utils/endpoints";
 import { Box, Button, Typography } from "@mui/material";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
@@ -12,6 +13,8 @@ import React, { useEffect, useRef, useState } from "react";
 const Role = () => {
   const toast = useRef(null);
   const [roles, setRoles] = useState([]);
+  const [updateId, setUpdateId] = useState();
+  const [editObject, setEditObject] = useState({});
 
   useEffect(() => {
     getRoles();
@@ -23,6 +26,34 @@ const Role = () => {
       setRoles(response.data.roles);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("updateId", updateId);
+    if (updateId) {
+      getRoleByID();
+    }
+  }, [updateId]);
+
+  const getRoleByID = async () => {
+    try {
+      const payload = {
+        role_id: updateId,
+      };
+
+      console.log("payload", payload);
+
+      const response = await axiosWrapper(
+        roleEndpoints.GET_ROLE_BY_ID,
+        payload,
+        "post"
+      );
+      setEditObject(response.data.role);
+    } catch (error) {
+      if (error) {
+        toast.current.show(showError(error.response.data.message));
+      }
     }
   };
 
@@ -48,7 +79,7 @@ const Role = () => {
   };
 
   const handleEdit = (row) => {
-    console.log("row", row);
+    console.log("executed", row.role_id);
     confirmDialog({
       message: "Are you sure you want to edit this role ?",
       header: "Confirmation",
@@ -64,6 +95,10 @@ const Role = () => {
           }}
         ></i>
       ),
+      accept: () => {
+        setUpdateId(row.role_id);
+        setIsCreateRole(true);
+      },
     });
   };
 
@@ -265,9 +300,12 @@ const Role = () => {
           </div>
           {isCreateRole && (
             <CreateRole
-              handleModal={handleModal}
+              setIsCreateRole={setIsCreateRole}
               toast={toast}
               getRoles={getRoles}
+              editObject={editObject}
+              setEditObject={setEditObject}
+              setUpdateId={setUpdateId}
             />
           )}
         </Box>

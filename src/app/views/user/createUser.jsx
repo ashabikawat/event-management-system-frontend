@@ -18,7 +18,14 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
-const CreateUser = ({ setIsCreateUser, toast, getUser, editObject }) => {
+const CreateUser = ({
+  setIsCreateUser,
+  toast,
+  getUser,
+  editObject,
+  setUpdateId,
+  setEditObject,
+}) => {
   const [roles, setRoles] = useState([]);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -161,10 +168,10 @@ const CreateUser = ({ setIsCreateUser, toast, getUser, editObject }) => {
       role: "",
     });
     setErrors({});
+    setUpdateId(null);
+    setEditObject({});
 
-    if (Object.keys(editObject)?.length > 0) {
-      setIsCreateUser(false);
-    }
+    setIsCreateUser(false);
   };
 
   useEffect(() => {
@@ -227,7 +234,11 @@ const CreateUser = ({ setIsCreateUser, toast, getUser, editObject }) => {
                 cursor: "pointer",
               }}
               className="close-btn"
-              onClick={() => setIsCreateUser(false)}
+              onClick={() => {
+                setIsCreateUser(false);
+                setEditObject({});
+                setUpdateId(null);
+              }}
             >
               {" "}
               <i
