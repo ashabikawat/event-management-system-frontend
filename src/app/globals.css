@@ -39,3 +39,12 @@ td {
 .p-datatable .p-datatable-thead > tr > th {
   padding: 14px 12px; /* adjust header height */
 }
+
+.MuiFormHelperText-root {
+  font-family: inherit !important;
+  font-weight: 400 !important;
+}
+
+.close-btn:hover {
+  scale: 1.1;
+}

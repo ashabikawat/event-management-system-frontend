@@ -1,15 +1,91 @@
+"use client";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const CreateUser = ({ handleModal }) => {
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formValues, setFormValues] = useState({
+    username: "",
+    password: "",
+    phone: "",
+    email: "",
+    name: "",
+    role: "",
+  });
+
+  const validateData = (e) => {
+    e.preventDefault();
+
+    console.log("executed");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[1-9]\d{9}$/;
+
+    let newErrors = {};
+
+    const { username, password, phone, email, name, role } = formValues;
+
+    if (!username) {
+      newErrors.username = "Username is required";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    }
+
+    if (phone && phoneRegex.test(phone)) {
+      newErrors.phone = "Phone number must be valid number";
+    }
+
+    if (email && emailRegex.test(email)) {
+      newErrors.email = "Email id must be valid id";
+    }
+
+    if (!name) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!role) {
+      newErrors.role = "Role is required";
+    }
+
+    setErrors(newErrors);
+
+    console.log("formValues", formValues);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleReset = () => {
+    setFormValues({
+      username: "",
+      password: "",
+      phone: "",
+      email: "",
+      name: "",
+      role: "",
+    });
+    setErrors({});
+  };
+
   return (
     <Box
       sx={{
@@ -19,7 +95,7 @@ const CreateUser = ({ handleModal }) => {
         width: "100vw",
         height: "100vh",
         bgcolor: "rgba(0,0,0,0.5)",
-        zIndex: 2000,
+        zIndex: 700,
       }}
     >
       <Box
@@ -48,12 +124,14 @@ const CreateUser = ({ handleModal }) => {
           </Typography>
           <span
             style={{
-              backgroundColor: "#F9F9F9",
+              backgroundColor: "red",
+              color: "white",
               padding: "2px 6px",
               borderRadius: "20px",
               border: "1px solid #F8FAFB",
               cursor: "pointer",
             }}
+            className="close-btn"
             onClick={handleModal}
           >
             {" "}
@@ -66,14 +144,16 @@ const CreateUser = ({ handleModal }) => {
             ></i>
           </span>
         </Box>
+
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
             gap: "30px",
           }}
         >
+          {/* username */}
           <FormControl fullWidth>
             <label
               style={{
@@ -83,25 +163,35 @@ const CreateUser = ({ handleModal }) => {
                 fontWeight: "500",
               }}
             >
-              Username
+              Username <span style={{ color: "red" }}>*</span>
             </label>
             <TextField
               variant="outlined"
+              value={formValues.username}
+              onChange={handleChange}
+              name="username"
               size="small"
               sx={{
-                bgcolor: "#FAFAFA",
                 borderRadius: "10px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
               }}
+              error={errors.username}
+              helperText={errors.username}
             />
           </FormControl>
 
-          <FormControl fullWidth>
+          {/* password */}
+          <FormControl fullWidth error={errors.password}>
             <label
               style={{
                 color: "#8D8D8D",
@@ -110,34 +200,144 @@ const CreateUser = ({ handleModal }) => {
                 fontWeight: "500",
               }}
             >
-              Password
+              Password <span style={{ color: "red" }}>*</span>
             </label>
-            <TextField
-              variant="outlined"
+            <OutlinedInput
+              onChange={handleChange}
+              value={formValues.password}
+              name="password"
+              // variant="outlined"
+              type={isShowPassword ? "type" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setIsShowPassword(!isShowPassword)}
+                    edge="end"
+                  >
+                    {isShowPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
               size="small"
               sx={{
                 bgcolor: "#FAFAFA",
                 borderRadius: "10px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
               }}
             />
+            {errors.password && (
+              <FormHelperText>{errors.password}</FormHelperText>
+            )}
           </FormControl>
         </Box>
 
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
             gap: "30px",
             marginTop: "14px",
           }}
         >
+          {/* name */}
+          <FormControl fullWidth>
+            <label
+              style={{
+                color: "#8D8D8D",
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              Display name <span style={{ color: "red" }}>*</span>
+            </label>
+            <TextField
+              value={formValues.name}
+              onChange={handleChange}
+              name="name"
+              variant="outlined"
+              size="small"
+              sx={{
+                borderRadius: "10px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "10px", // ensures the outline itself has rounded corners
+                },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
+              }}
+              error={errors.name}
+              helperText={errors.name}
+            />
+          </FormControl>
+
+          {/* role */}
+          <FormControl fullWidth error={errors.role}>
+            <label
+              style={{
+                color: "#8D8D8D",
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              Role <span style={{ color: "red" }}>*</span>
+            </label>
+            <Select
+              size="small"
+              onChange={handleChange}
+              name="role"
+              value={formValues.role || ""}
+              sx={{
+                bgcolor: "#FAFAFA",
+                borderRadius: "10px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px", // applies to the outer border
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderRadius: "10px", // ensures the outline itself has rounded corners
+                },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
+              }}
+            >
+              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="HR">HR</MenuItem>
+              <MenuItem value="SDE">Software developer</MenuItem>
+            </Select>
+
+            {errors.role && <FormHelperText>{errors.role}</FormHelperText>}
+          </FormControl>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "30px",
+            marginTop: "14px",
+            alignItems: "flex-start",
+          }}
+        >
+          {/* phone number */}
           <FormControl fullWidth>
             <label
               style={{
@@ -150,21 +350,32 @@ const CreateUser = ({ handleModal }) => {
               Phone no
             </label>
             <TextField
+              value={formValues.phone}
               variant="outlined"
               size="small"
+              name="phone"
+              onChange={handleChange}
               sx={{
-                bgcolor: "#FAFAFA",
+                // height: "70px",
                 borderRadius: "10px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
               }}
+              error={errors.phone}
+              helperText={errors.phone}
             />
           </FormControl>
 
+          {/* email */}
           <FormControl fullWidth>
             <label
               style={{
@@ -177,86 +388,31 @@ const CreateUser = ({ handleModal }) => {
               Email
             </label>
             <TextField
+              value={formValues.email}
               variant="outlined"
+              name="email"
+              onChange={handleChange}
               size="small"
               sx={{
-                bgcolor: "#FAFAFA",
                 borderRadius: "10px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "10px", // applies to the outer border
+                  bgcolor: "#FAFAFA",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: "10px", // ensures the outline itself has rounded corners
                 },
+                ".MuiInputBase-input": {
+                  fontSize: "16px",
+                  fontFamily: "inherit",
+                },
               }}
+              error={errors.email}
+              helperText={errors.email}
             />
           </FormControl>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "30px",
-            marginTop: "14px",
-          }}
-        >
-          <FormControl fullWidth>
-            <label
-              style={{
-                color: "#8D8D8D",
-                marginBottom: "10px",
-                fontSize: "14px",
-                fontWeight: "500",
-              }}
-            >
-              Display name
-            </label>
-            <TextField
-              variant="outlined"
-              size="small"
-              sx={{
-                bgcolor: "#FAFAFA",
-                borderRadius: "10px",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px", // applies to the outer border
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderRadius: "10px", // ensures the outline itself has rounded corners
-                },
-              }}
-            />
-          </FormControl>
-
-          <FormControl fullWidth>
-            <label
-              style={{
-                color: "#8D8D8D",
-                marginBottom: "10px",
-                fontSize: "14px",
-                fontWeight: "500",
-              }}
-            >
-              Role
-            </label>
-            <Select
-              size="small"
-              sx={{
-                bgcolor: "#FAFAFA",
-                borderRadius: "10px",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px", // applies to the outer border
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderRadius: "10px", // ensures the outline itself has rounded corners
-                },
-              }}
-            >
-              <MenuItem value="admin">Admin</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
         <Box
           sx={{
             marginTop: "24px",
@@ -269,13 +425,22 @@ const CreateUser = ({ handleModal }) => {
           <Button
             variant="contained"
             size="small"
+            onClick={handleReset}
             sx={{
               bgcolor: "white",
               color: "black",
-              border: "1px solid #D8D8D9",
+              border: "1px solid #F0F0F0",
               boxShadow: 0,
-              fontWeight: "500",
+              // fontWeight: "500",
               fontFamily: "inherit",
+              padding: "6px 22px",
+              textTransform: "capitalize",
+              borderRadius: "8px",
+              // fontSize: "16px",
+              "&:hover": {
+                bgcolor: "#F5F4F7",
+                boxShadow: 2,
+              },
             }}
           >
             Reset
@@ -283,12 +448,19 @@ const CreateUser = ({ handleModal }) => {
           <Button
             variant="contained"
             size="small"
+            onClick={validateData}
             sx={{
-              bgcolor: "#28A745",
+              bgcolor: "green",
               color: "#FFFFFF",
               boxShadow: 0,
               fontWeight: "500",
               fontFamily: "inherit",
+              textTransform: "capitalize",
+              padding: "6px 22px",
+              borderRadius: "8px",
+              "&:hover": {
+                boxShadow: 2,
+              },
             }}
           >
             Create

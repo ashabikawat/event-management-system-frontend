@@ -201,15 +201,19 @@ const User = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                border: "2px solid #F7F7F7",
+                border: "1px solid #F0F0F0",
                 color: "#3D3D4E",
                 fontWeight: "600",
                 fontFamily: "inherit",
-                padding: "6px 10px",
+                padding: "6px 20px",
+                borderRadius: "8px",
                 gap: "4px",
+                boxShadow: 0,
                 textTransform: "capitalize",
-                borderBottom: "2px solid #EFEFEF",
                 borderRadius: "10px",
+                "&:hover": {
+                  bgcolor: "#F5F4F7",
+                },
               }}
             >
               <i class="ri-time-line"></i>
@@ -221,15 +225,19 @@ const User = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                border: "2px solid #F7F7F7",
+                border: "1px solid #F0F0F0",
                 color: "#3D3D4E",
                 fontWeight: "600",
                 fontFamily: "inherit",
-                padding: "6px 10px",
+                padding: "6px 20px",
+                borderRadius: "8px",
                 gap: "4px",
+                boxShadow: 0,
                 textTransform: "capitalize",
-                borderBottom: "2px solid #EFEFEF",
                 borderRadius: "10px",
+                "&:hover": {
+                  bgcolor: "#F5F4F7",
+                },
               }}
             >
               <i class="ri-file-text-line"></i>
@@ -247,7 +255,7 @@ const User = () => {
 
                 fontWeight: "600",
                 fontFamily: "inherit",
-                padding: "6px 10px",
+                padding: "6px 20px",
                 gap: "4px",
                 textTransform: "capitalize",
                 // borderBottom: "2px solid #EFEFEF",
