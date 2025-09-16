@@ -7,6 +7,8 @@ export const login = {
 export const userEndpoints = {
   GET_USER: url + "/user/getUsers",
   CREATE_USER: url + "/user/createUser",
+  GET_USER_BY_ID: url + "/user/getUserById",
+  UPDATE_USER: url + "/user/updateUser",
 };
 
 export const roleEndpoints = {

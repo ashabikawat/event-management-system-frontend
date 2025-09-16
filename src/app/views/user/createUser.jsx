@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
-const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
+const CreateUser = ({ setIsCreateUser, toast, getUser, editObject }) => {
   const [roles, setRoles] = useState([]);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -30,6 +30,17 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
     name: "",
     role: "",
   });
+
+  useEffect(() => {
+    setFormValues({
+      username: editObject?.user_name || "",
+      password: "",
+      phone: editObject?.mob_no || "",
+      email: editObject?.email || "",
+      name: editObject?.name || "",
+      role: editObject?.role_id || "",
+    });
+  }, [editObject]);
 
   const validateData = (e) => {
     e.preventDefault();
@@ -45,7 +56,7 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
       newErrors.username = "Username is required";
     }
 
-    if (!password) {
+    if (!password && !Object.keys(editObject)?.length > 0) {
       newErrors.password = "Password is required";
     }
 
@@ -67,6 +78,8 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
 
     setErrors(newErrors);
 
+    console.log("newErrors", newErrors);
+
     if (Object.keys(newErrors).length === 0) {
       saveUser();
     }
@@ -74,22 +87,42 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
 
   const saveUser = async () => {
     try {
-      const payload = {
-        user_name: formValues.username,
-        password: formValues.password,
-        name: formValues.name,
-        email: formValues.email || null,
-        mob: formValues.phone || null,
-        role_id: formValues.role,
-      };
+      let response;
 
-      const response = await axiosWrapper(
-        userEndpoints.CREATE_USER,
-        payload,
-        "post"
-      );
+      if (Object.keys(editObject)?.length > 0) {
+        const payload = {
+          password: formValues.password,
+          name: formValues.name,
+          email: formValues.email || null,
+          mob: formValues.phone || null,
+          role_id: formValues.role,
+          user_id: editObject?.user_id,
+        };
+        console.log(payload);
+        response = await axiosWrapper(
+          userEndpoints.UPDATE_USER,
+          payload,
+          "patch"
+        );
+      } else {
+        const payload = {
+          user_name: formValues.username,
+          password: formValues.password,
+          name: formValues.name,
+          email: formValues.email || null,
+          mob: formValues.phone || null,
+          role_id: formValues.role,
+        };
+        response = await axiosWrapper(
+          userEndpoints.CREATE_USER,
+          payload,
+          "post"
+        );
+      }
 
       setIsCreateUser(false);
+
+      console.log(response);
 
       if (response.data.status === 200) {
         toast.current.show(showSuccess(response.data.message));
@@ -128,6 +161,10 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
       role: "",
     });
     setErrors({});
+
+    if (Object.keys(editObject)?.length > 0) {
+      setIsCreateUser(false);
+    }
   };
 
   useEffect(() => {
@@ -178,7 +215,7 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
             }}
           >
             <Typography fontWeight={600} fontFamily="inherit" fontSize="18px">
-              Add User
+              {Object.keys(editObject)?.length > 0 ? "Update User" : "Add User"}
             </Typography>
             <span
               style={{
@@ -245,11 +282,15 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
                 }}
                 error={errors.username}
                 helperText={errors.username}
+                disabled={Object.keys(editObject)?.length > 0}
               />
             </FormControl>
 
             {/* password */}
-            <FormControl fullWidth error={errors.password}>
+            <FormControl
+              fullWidth
+              error={errors.password && !Object.keys(editObject)?.length > 0}
+            >
               <label
                 style={{
                   color: "#8D8D8D",
@@ -293,7 +334,7 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
                   },
                 }}
               />
-              {errors.password && (
+              {errors.password && !Object.keys(editObject)?.length > 0 && (
                 <FormHelperText>{errors.password}</FormHelperText>
               )}
             </FormControl>
@@ -529,7 +570,7 @@ const CreateUser = ({ setIsCreateUser, toast, getUser }) => {
                 },
               }}
             >
-              Create
+              {Object.keys(editObject)?.length > 0 ? "Update" : "Create"}
             </Button>
           </Box>
         </Box>

@@ -6,6 +6,9 @@ export const axiosWrapper = (url, payload, method) => {
   }
   if (method === "get") {
     return axios.get(url);
+  } else if (method === "patch") {
+    return axios.patch(url, payload);
   }
+
   return axios.post(url, payload);
 };

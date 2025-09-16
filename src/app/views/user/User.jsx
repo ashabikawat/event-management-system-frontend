@@ -16,6 +16,8 @@ const User = () => {
   const userDetails = authDetails.user;
   const [isCreateUser, setIsCreateUser] = useState(false);
   const [user, setUser] = useState([]);
+  const [editObject, setEditObject] = useState({});
+  const [updateId, setUpdateId] = useState();
 
   const getUser = async () => {
     try {
@@ -29,6 +31,30 @@ const User = () => {
   useEffect(() => {
     getUser();
   }, []);
+
+  useEffect(() => {
+    if (updateId) {
+      getUserById();
+    }
+  }, [updateId]);
+
+  const getUserById = async () => {
+    try {
+      const payload = {
+        user_id: updateId,
+      };
+      const response = await axiosWrapper(
+        userEndpoints.GET_USER_BY_ID,
+        payload,
+        "post"
+      );
+      setEditObject(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("editObject", editObject);
 
   const handleDelete = (row) => {
     console.log("row", row);
@@ -53,6 +79,7 @@ const User = () => {
 
   const handleEdit = (row) => {
     console.log("row", row);
+
     confirmDialog({
       message: "Are you sure you want to edit this user ?",
       header: "Confirmation",
@@ -68,6 +95,10 @@ const User = () => {
           }}
         ></i>
       ),
+      accept: () => {
+        setUpdateId(row.user_id);
+        setIsCreateUser(true);
+      },
     });
   };
 
@@ -116,8 +147,8 @@ const User = () => {
   };
 
   const phoneTemplate = (row) => {
-    return row.phone && row.phone.trim() !== " " ? (
-      row.phone
+    return row.mob_no && row.mob_no.trim() !== " " ? (
+      row.mob_no
     ) : (
       <span style={{ display: "block", textAlign: "left", width: "100%" }}>
         -
@@ -140,7 +171,7 @@ const User = () => {
     { id: 2, field: "name", header: "Display name" },
     { id: 2, field: "role_name", header: "Role" },
     { id: 3, field: "email", header: "Email", body: emailTemplate },
-    { id: 4, field: "phone", header: "Phone no.", body: phoneTemplate },
+    { id: 4, field: "mob_no", header: "Phone no.", body: phoneTemplate },
     // { id: 5, field: "status", header: "Status", body: StatusTemplate },
     { id: 6, field: "action", header: "Actions", body: ActionTemplate },
   ];
@@ -263,7 +294,10 @@ const User = () => {
                   // borderBottom: "2px solid #EFEFEF",
                   borderRadius: "10px",
                 }}
-                onClick={() => setIsCreateUser(true)}
+                onClick={() => {
+                  setEditObject({});
+                  setIsCreateUser(true);
+                }}
               >
                 <i class="ri-add-line"></i>
                 <span>Add User</span>
@@ -280,6 +314,7 @@ const User = () => {
               setIsCreateUser={setIsCreateUser}
               toast={toast}
               getUser={getUser}
+              editObject={editObject}
             />
           )}
         </Box>
