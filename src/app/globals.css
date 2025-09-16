@@ -120,3 +120,15 @@ td {
 .p-confirm-dialog-message {
   font-family: "Mona Sans" !important;
 }
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background-color: white !important;
+}
+
+.p-toast-summary {
+  font-family: "Mona Sans" !important;
+}
+
+.p-toast-detail {
+  font-family: "Mona Sans" !important;
+}

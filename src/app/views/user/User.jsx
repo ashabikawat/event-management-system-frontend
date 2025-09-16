@@ -6,92 +6,29 @@ import CreateUser from "@/app/views/user/createUser";
 import { Tag } from "primereact/tag";
 import { Toast } from "primereact/toast";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import { useSelector } from "react-redux";
+import { axiosWrapper } from "@/utils/axiosWrapper";
+import { userEndpoints } from "@/utils/endpoints";
 
 const User = () => {
   const toast = useRef(null);
+  const authDetails = useSelector((store) => store.auth);
+  const userDetails = authDetails.user;
   const [isCreateUser, setIsCreateUser] = useState(false);
-  const user = [
-    {
-      id: 1,
-      username: "ashaa_b",
-      name: "Ashaa Bikawat",
-      email: "ashaa.b@example.com",
-      phone: "+91 98765 43210",
-      status: "Active",
-    },
-    {
-      id: 2,
-      username: "raaj_p",
-      name: "Raaj Patil",
-      email: "raaj.p@example.com",
-      phone: "+91 87654 32109",
-      status: "Active",
-    },
-    {
-      id: 3,
-      username: "salman_k",
-      name: "Salman Khan",
-      email: "salman.khan@example.com",
-      phone: "+91 76543 21098",
-      status: "Inactive",
-    },
-    {
-      id: 4,
-      username: "aamir_k",
-      name: "Aamir Khan",
-      email: "aamir.khan@example.com",
-      phone: "+91 65432 10987",
-      status: "Active",
-    },
-    {
-      id: 5,
-      username: "neha_s",
-      name: "Neha Sharma",
-      email: "neha.sharma@example.com",
-      phone: "+91 91234 56780",
-      status: "Active",
-    },
-    {
-      id: 6,
-      username: "vikram_r",
-      name: "Vikram Rao",
-      email: "vikram.rao@example.com",
-      phone: "+91 99887 66554",
-      status: "Inactive",
-    },
-    {
-      id: 7,
-      username: "meena_g",
-      name: "Meena Gupta",
-      email: "meena.g@example.com",
-      phone: "+91 88990 11223",
-      status: "Active",
-    },
-    {
-      id: 8,
-      username: "arjun_m",
-      name: "Arjun Mehta",
-      email: "arjun.mehta@example.com",
-      phone: "+91 93456 78901",
-      status: "Inactive",
-    },
-    {
-      id: 9,
-      username: "priya_k",
-      name: "Priya Kapoor",
-      email: "priya.kapoor@example.com",
-      phone: "+91 94567 89012",
-      status: "Active",
-    },
-    {
-      id: 10,
-      username: "rahul_j",
-      name: "Rahul Joshi",
-      email: "rahul.joshi@example.com",
-      phone: "+91 95678 90123",
-      status: "Active",
-    },
-  ];
+  const [user, setUser] = useState([]);
+
+  const getUser = async () => {
+    try {
+      const response = await axiosWrapper(userEndpoints.GET_USER, {}, "get");
+      setUser(response.data.users);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const handleDelete = (row) => {
     console.log("row", row);
@@ -178,23 +115,39 @@ const User = () => {
     );
   };
 
-  const column = [
-    { id: 1, field: "id", header: "ID" },
-    { id: 2, field: "username", header: "User name" },
-    { id: 3, field: "name", header: "Display name" },
-    { id: 4, field: "email", header: "Email" },
-    { id: 5, field: "phone", header: "Phone no." },
-    { id: 6, field: "status", header: "Status", body: StatusTemplate },
-    { id: 7, field: "action", header: "Actions", body: ActionTemplate },
-  ];
-
-  const handleModal = () => {
-    setIsCreateUser(false);
+  const phoneTemplate = (row) => {
+    return row.phone && row.phone.trim() !== " " ? (
+      row.phone
+    ) : (
+      <span style={{ display: "block", textAlign: "left", width: "100%" }}>
+        -
+      </span>
+    );
   };
+
+  const emailTemplate = (row) => {
+    return row.email && row.email.trim() !== " " ? (
+      row.email
+    ) : (
+      <span style={{ display: "block", textAlign: "left", width: "100%" }}>
+        -
+      </span>
+    );
+  };
+
+  const column = [
+    { id: 1, field: "user_name", header: "User name" },
+    { id: 2, field: "name", header: "Display name" },
+    { id: 2, field: "role_name", header: "Role" },
+    { id: 3, field: "email", header: "Email", body: emailTemplate },
+    { id: 4, field: "phone", header: "Phone no.", body: phoneTemplate },
+    // { id: 5, field: "status", header: "Status", body: StatusTemplate },
+    { id: 6, field: "action", header: "Actions", body: ActionTemplate },
+  ];
 
   return (
     <>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="top-center" />
       <ConfirmDialog />
       <Box
         sx={{
@@ -322,7 +275,13 @@ const User = () => {
 
           <Datagrid columns={column} value={user} />
 
-          {isCreateUser && <CreateUser handleModal={handleModal} />}
+          {isCreateUser && (
+            <CreateUser
+              setIsCreateUser={setIsCreateUser}
+              toast={toast}
+              getUser={getUser}
+            />
+          )}
         </Box>
       </Box>
     </>

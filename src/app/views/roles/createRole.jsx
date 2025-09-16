@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,19 +10,68 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { axiosWrapper } from "@/utils/axiosWrapper";
+import { menuEndpoints, roleEndpoints } from "@/utils/endpoints";
+import { showError, showSuccess } from "@/utils/confirmationBox";
 
-const CreateRole = ({ handleModal }) => {
+const CreateRole = ({ handleModal, toast, getRoles }) => {
   const [formValues, setFormValues] = useState({
     role: "",
-    roleAccess: "",
+    roleAccess: [],
   });
 
+  const [menus, setMenus] = useState([]);
+
   const [errors, setErrors] = useState({});
+
+  const getMenusList = async () => {
+    try {
+      const response = await axiosWrapper(menuEndpoints.GET_MENUS, {}, "get");
+      setMenus(response.data.menus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getMenusList();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const saveRole = async () => {
+    try {
+      const payload = {
+        role_name: formValues.role,
+        menus: formValues.roleAccess,
+      };
+
+      const response = await axiosWrapper(
+        roleEndpoints.CREATE_ROLES,
+        payload,
+        "post"
+      );
+
+      console.log(response.data.status);
+
+      if (response.data.status === 200) {
+        toast.current.show(showSuccess(response.data.message));
+        handleModal();
+        handleReset();
+        getRoles();
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error) {
+        toast.current.show(showError(error.response.data.message));
+        handleModal();
+        handleReset();
+      }
+    }
   };
 
   const validateData = (e) => {
@@ -41,6 +90,10 @@ const CreateRole = ({ handleModal }) => {
     }
 
     setErrors(newError);
+
+    if (Object.keys(newError)?.length === 0) {
+      saveRole();
+    }
   };
 
   const handleReset = () => {
@@ -164,6 +217,7 @@ const CreateRole = ({ handleModal }) => {
             <Select
               size="small"
               name="roleAccess"
+              multiple
               value={formValues.roleAccess}
               onChange={handleChange}
               sx={{
@@ -181,30 +235,16 @@ const CreateRole = ({ handleModal }) => {
                 },
               }}
             >
-              <MenuItem
-                value="admin"
-                sx={{
-                  fontFamily: "inherit",
-                }}
-              >
-                Dashboard
-              </MenuItem>
-              <MenuItem
-                value="admin"
-                sx={{
-                  fontFamily: "inherit",
-                }}
-              >
-                User management
-              </MenuItem>
-              <MenuItem
-                value="admin"
-                sx={{
-                  fontFamily: "inherit",
-                }}
-              >
-                Role management
-              </MenuItem>
+              {menus?.map((menu) => (
+                <MenuItem
+                  value={menu.menu_id}
+                  sx={{
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {menu.menu_name}
+                </MenuItem>
+              ))}
             </Select>
             {errors.roleAccess && (
               <FormHelperText>{errors.roleAccess}</FormHelperText>

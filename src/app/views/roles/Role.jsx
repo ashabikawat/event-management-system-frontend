@@ -1,86 +1,30 @@
 "use client";
 import CreateRole from "@/app/views/roles/createRole";
 import Datagrid from "@/reuseableComponents/dataGrid";
+import { axiosWrapper } from "@/utils/axiosWrapper";
+import { roleEndpoints } from "@/utils/endpoints";
 import { Box, Button, Typography } from "@mui/material";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { Tag } from "primereact/tag";
 import { Toast } from "primereact/toast";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Role = () => {
   const toast = useRef(null);
-  const roles = [
-    {
-      id: 1,
-      roleName: "Admin",
-      description: "Full access to all system features",
-      permissions: "Read, Write, Delete, Manage Users",
-      status: "Active",
-    },
-    {
-      id: 2,
-      roleName: "Manager",
-      description: "Manage teams and oversee projects",
-      permissions: "Read, Write, Approve",
-      status: "Active",
-    },
-    {
-      id: 3,
-      roleName: "Editor",
-      description: "Can edit and update content",
-      permissions: "Read, Write",
-      status: "Active",
-    },
-    {
-      id: 4,
-      roleName: "Viewer",
-      description: "Read-only access to system data",
-      permissions: "Read",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      roleName: "HR",
-      description: "Manages employee records and payroll",
-      permissions: "Read, Write, Approve",
-      status: "Active",
-    },
-    {
-      id: 6,
-      roleName: "Finance",
-      description: "Handles billing and financial reports",
-      permissions: "Read, Write",
-      status: "Inactive",
-    },
-    {
-      id: 7,
-      roleName: "Support",
-      description: "Handles user queries and tickets",
-      permissions: "Read, Write",
-      status: "Active",
-    },
-    {
-      id: 8,
-      roleName: "QA",
-      description: "Tests and ensures product quality",
-      permissions: "Read, Write, Approve",
-      status: "Inactive",
-    },
-    {
-      id: 9,
-      roleName: "Developer",
-      description: "Builds and maintains system features",
-      permissions: "Read, Write, Deploy",
-      status: "Active",
-    },
-    {
-      id: 10,
-      roleName: "Guest",
-      description: "Temporary access with limited rights",
-      permissions: "Read",
-      status: "Inactive",
-    },
-  ];
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    getRoles();
+  }, []);
+
+  const getRoles = async () => {
+    try {
+      const response = await axiosWrapper(roleEndpoints.GET_ROLES, {}, "get");
+      setRoles(response.data.roles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDelete = (row) => {
     console.log("row", row);
@@ -167,13 +111,23 @@ const Role = () => {
     );
   };
 
+  const permissionsTemplate = (row) => {
+    const rowMenus = row?.menus?.join(", ");
+    return row.menus[0] !== null ? (
+      rowMenus
+    ) : (
+      <span style={{ display: "block", textAlign: "left", width: "100%" }}>
+        -
+      </span>
+    );
+  };
+
   const columns = [
-    { id: 1, field: "id", header: "ID" },
-    { id: 2, field: "roleName", header: "Role name" },
-    { id: 3, field: "description", header: "Description" },
-    { id: 4, field: "permissions", header: "Permissions" },
-    { id: 6, field: "status", header: "Status", body: StatusTemplate },
-    { id: 7, field: "action", header: "Actions", body: ActionTemplate },
+    { id: 1, field: "role_id", header: "ID" },
+    { id: 2, field: "role_name", header: "Role name" },
+    { id: 3, field: "menus", header: "Permissions", body: permissionsTemplate },
+    // { id: 6, field: "status", header: "Status", body: StatusTemplate },
+    { id: 4, field: "action", header: "Actions", body: ActionTemplate },
   ];
 
   const [isCreateRole, setIsCreateRole] = useState(false);
@@ -182,7 +136,7 @@ const Role = () => {
   };
   return (
     <>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="top-center" />
       <ConfirmDialog />
       <Box
         sx={{
@@ -309,7 +263,13 @@ const Role = () => {
           <div style={{ height: 500, width: "100%" }}>
             <Datagrid value={roles} columns={columns} />
           </div>
-          {isCreateRole && <CreateRole handleModal={handleModal} />}
+          {isCreateRole && (
+            <CreateRole
+              handleModal={handleModal}
+              toast={toast}
+              getRoles={getRoles}
+            />
+          )}
         </Box>
       </Box>
     </>
