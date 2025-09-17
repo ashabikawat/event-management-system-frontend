@@ -149,7 +149,7 @@ const Event = () => {
                 borderRadius: "10px",
               }}
               onClick={() => {
-                window.open("/createEvent", "_blank");
+                window.open("/create-event", "_blank");
               }}
             >
               <i class="ri-add-line"></i>
