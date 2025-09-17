@@ -25,3 +25,7 @@ export const menuEndpoints = {
 export const artistEndpoints = {
   CREATE_ARTIST: url + "/artist/createArtist",
 };
+
+export const categoryEndpoints = {
+  CREATE_CATEGORY: url + "/category/createCategory",
+};
