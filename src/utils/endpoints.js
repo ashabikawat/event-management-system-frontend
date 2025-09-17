@@ -21,3 +21,7 @@ export const roleEndpoints = {
 export const menuEndpoints = {
   GET_MENUS: url + "/role/getMenus",
 };
+
+export const artistEndpoints = {
+  CREATE_ARTIST: url + "/artist/createArtist",
+};

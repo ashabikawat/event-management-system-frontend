@@ -1,6 +1,11 @@
 import axios from "axios";
 
-export const axiosWrapper = (url, payload, method) => {
+export const axiosWrapper = (
+  url,
+  payload,
+  method,
+  headers = { "Content-Type": "application/json" }
+) => {
   if (!url || !payload) {
     return alert("url and payload is required");
   }
@@ -10,5 +15,5 @@ export const axiosWrapper = (url, payload, method) => {
     return axios.patch(url, payload);
   }
 
-  return axios.post(url, payload);
+  return axios.post(url, payload, headers);
 };
