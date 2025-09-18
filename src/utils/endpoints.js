@@ -1,4 +1,4 @@
-const url = "http://localhost:4000";
+export const url = "http://localhost:4000";
 
 export const login = {
   LOGIN: url + "/user/login",
@@ -24,6 +24,8 @@ export const menuEndpoints = {
 
 export const artistEndpoints = {
   CREATE_ARTIST: url + "/artist/createArtist",
+  GET_ARTISTS: url + "/artist/getArtist",
+  GET_ARTIST_BY_ID: url + "/artist/getArtistById",
 };
 
 export const categoryEndpoints = {

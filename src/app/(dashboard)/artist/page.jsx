@@ -1,11 +1,11 @@
-import CreateArtist from "@/app/views/artist/CreateArtist";
+import Artist from "@/app/views/artist/ArtistList";
 import LayoutWrapper from "@/utils/layoutWrapper";
 import React from "react";
 
 const page = () => {
   return (
     <LayoutWrapper>
-      <CreateArtist />
+      <Artist />
     </LayoutWrapper>
   );
 };
