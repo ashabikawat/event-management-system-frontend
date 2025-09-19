@@ -1,3 +1,4 @@
 swal pending for showing error in the catch block and when wrong id and password
 add faq and add carousel images ui needs to be improved in create event
 Tabs UI needs to be improved
+edit artist functionality pending 

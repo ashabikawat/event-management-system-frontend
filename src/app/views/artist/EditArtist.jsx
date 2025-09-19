@@ -2,7 +2,7 @@
 import { axiosWrapper } from "@/utils/axiosWrapper";
 import { showError, showSuccess } from "@/utils/confirmationBox";
 import { artistEndpoints } from "@/utils/endpoints";
-import { CloudUpload } from "@mui/icons-material";
+import { Close, CloudUpload } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -81,6 +81,7 @@ const EditArtist = () => {
     // console.log("formvalues", formValues);
 
     const formData = new FormData();
+    formData.append("artist_id", updateId);
     formData.append("artist_name", formValues.artistName);
     formData.append("artist_description", formValues.artistDescription);
 
@@ -90,19 +91,15 @@ const EditArtist = () => {
 
     try {
       const response = await axiosWrapper(
-        artistEndpoints.CREATE_ARTIST,
+        artistEndpoints.UPDATE_ARTIST,
         formData,
+        "patch",
         { "Content-Type": "multipart/form-data" }
       );
 
       if (response.data.status === 200) {
         toast.current.show(showSuccess(response.data.message));
-        setFormValues({
-          artistName: "",
-          artistDescription: "",
-          artistImages: [],
-        });
-        setSelectedImagesPreview(null);
+        getArtistByID();
       }
     } catch (error) {
       console.log(error);
@@ -265,24 +262,60 @@ const EditArtist = () => {
                         flexWrap: "wrap",
                       }}
                     >
-                      {selectedImagesPreview?.map((f) => {
-                        const path = `${url}/${f}`;
+                      {Array.isArray(selectedImagesPreview)
+                        ? selectedImagesPreview?.map((f) => {
+                            const path = `${url}/${f}`;
 
-                        const cleanPath = (p) =>
-                          p.replace(/\\/g, "/").replace(/\/+/g, "/");
+                            console.log(path);
 
-                        console.log(cleanPath(path));
-                        return (
-                          <Box>
-                            <Image
-                              src={cleanPath(path)}
-                              height={200}
-                              width={200}
-                              alt="image"
-                            />
-                          </Box>
-                        );
-                      })}
+                            const cleanPath = (p) =>
+                              p.replace(/\\/g, "/").replace(/\/+/g, "/");
+
+                            return (
+                              <Box
+                                sx={{
+                                  position: "relative",
+                                  border: "1px solid #ccc",
+                                  padding: "10px",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <Image
+                                  src={cleanPath(path)}
+                                  height={200}
+                                  width={200}
+                                  alt="image"
+                                />
+                                <Close
+                                  sx={{
+                                    position: "absolute",
+                                    top: 2,
+                                    right: 2,
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => {
+                                    const newImages =
+                                      selectedImagesPreview.filter(
+                                        (img) => img !== f
+                                      );
+
+                                    console.log(newImages);
+                                    setSelectedImagesPreview(newImages);
+                                  }}
+                                />
+                              </Box>
+                            );
+                          })
+                        : selectedImagesPreview?.newPreviewImages?.map((f) => (
+                            <Box>
+                              <Image
+                                src={f.url}
+                                height={150}
+                                width={150}
+                                alt="image"
+                              />
+                            </Box>
+                          ))}
                     </Box>
                   </Box>
                 </Box>

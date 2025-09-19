@@ -10,9 +10,9 @@ export const axiosWrapper = (
     return alert("url and payload is required");
   }
   if (method === "get") {
-    return axios.get(url);
+    return axios.get(url, payload, headers);
   } else if (method === "patch") {
-    return axios.patch(url, payload);
+    return axios.patch(url, payload, headers);
   }
 
   return axios.post(url, payload, headers);

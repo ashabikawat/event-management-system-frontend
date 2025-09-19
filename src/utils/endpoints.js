@@ -26,6 +26,7 @@ export const artistEndpoints = {
   CREATE_ARTIST: url + "/artist/createArtist",
   GET_ARTISTS: url + "/artist/getArtist",
   GET_ARTIST_BY_ID: url + "/artist/getArtistById",
+  UPDATE_ARTIST: url + "/artist/updateArtist",
 };
 
 export const categoryEndpoints = {
